@@ -88,6 +88,9 @@ public class UsuarioService {
                 break;
 
             default:
+            //Si no entra en el switch es un STAFF
+            //Lo grabamos
+            usuarioRepository.save(usuario);
                 break;
         }
 
