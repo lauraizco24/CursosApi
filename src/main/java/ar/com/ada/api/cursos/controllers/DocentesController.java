@@ -1,10 +1,10 @@
 package ar.com.ada.api.cursos.controllers;
 
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,6 +44,7 @@ public class DocentesController {
     }
 
     @GetMapping("/api/docentes/{id}")
+    @PreAuthorize("hasAuthority('CLAIM_userType_STAFF') or (hasAuthority('CLAIM_userType_DOCENTE') and hasAuthority('CLAIM_entityId_+#id'))")
     ResponseEntity<Docente> buscarPorIdDocente(@PathVariable Integer id) {
         Docente docente = docenteService.buscarPorId(id);
         if (docente == null)
@@ -60,6 +61,7 @@ public class DocentesController {
     // }
 
     @GetMapping("/api/docentes")
+    @PreAuthorize("hasAuthority('CLAIM_userType_STAFF')")
     ResponseEntity<List<Docente>> listarDocentes() {
         List<Docente> listaDocentes = docenteService.obtenerDocentes();
         return ResponseEntity.ok(listaDocentes);

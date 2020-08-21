@@ -51,7 +51,7 @@ public class EstudianteController {
     }
 //Metodo de autorizacion 4: en este caso, accedo a la variable del parametro.
     @GetMapping("/api/estudiantes/{id}")
-    @PreAuthorize("hasAuthority('CLAIM_userType_ESTUDIANTE') or (hasAuthority('CLAIM_userType_ESTUDIANTE') and hasAuthority('CLAIM_entityId_+#id'))")
+    @PreAuthorize("hasAuthority('CLAIM_userType_STAFF') or (hasAuthority('CLAIM_userType_ESTUDIANTE') and hasAuthority('CLAIM_entityId_+#id'))")
     ResponseEntity<Estudiante> buscarPorIdEstudiante(@PathVariable Integer id) {
         Estudiante estudiante = estudianteService.buscarPorId(id);
         if (estudiante == null)
@@ -60,6 +60,7 @@ public class EstudianteController {
     }
 
     @GetMapping("/api/estudiantes/{id}/cursos")
+    @PreAuthorize("hasAuthority('CLAIM_userType_STAFF')")
     public ResponseEntity<List<CursoEstudianteResponse>> listaCursos(@PathVariable Integer id,
             @RequestParam(value = "disponibles", required = false) boolean disponibles) {
         List<Curso> listaCursos = new ArrayList<>();

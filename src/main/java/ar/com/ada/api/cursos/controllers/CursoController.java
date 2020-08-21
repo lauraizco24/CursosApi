@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -73,6 +74,7 @@ listaCursos = cursoService.listaCursoSinDocentes();
   }
 
   @PostMapping("/api/cursos/{cursoId}/docentes")
+  @PreAuthorize("hasAuthority('CLAIM_userType_STAFF')")
     public ResponseEntity<GenericResponse> asignarDocente(@PathVariable Integer cursoId, @RequestBody CursoAsigDocRequest cADR){
     GenericResponse gR =new GenericResponse();
     if(cursoService.asignarDocente(cursoId, cADR.docenteId)){
