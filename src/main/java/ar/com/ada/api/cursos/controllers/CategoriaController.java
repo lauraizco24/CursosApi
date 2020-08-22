@@ -97,7 +97,20 @@ public class CategoriaController {
 
     }
 
-    // Autorizacion Forma 3:
+    
+    @GetMapping("/api/categorias")
+    public ResponseEntity<List<CategoriaResponse>> listarCategorias() {
+        List<Categoria> listaDeCategorias = categoriaService.listarTodas();
+        List<CategoriaResponse> listaCategoriasResponse = new ArrayList<CategoriaResponse>();
+        for (Categoria c : listaDeCategorias) {
+            CategoriaResponse catResponse = new CategoriaResponse();
+            catResponse.nombre = c.getNombre();
+            catResponse.descripcion = c.getDescripcion();
+            listaCategoriasResponse.add(catResponse);
+        }
+        return ResponseEntity.ok(listaCategoriasResponse);
+    }
+// Autorizacion Forma 3:
     // Metodo Verificacion 3: haciendo lo mismo que antes, pero leyendo
     // desde el el authority. O sea , cuando creamos el User para el UserDetails(no
     // el usuario)
@@ -111,19 +124,6 @@ public class CategoriaController {
     // db.
     // Este CLAIM lo podemos hacer con cualquier propiedad que querramos mandar
     // al JWT
-    @GetMapping("/api/categorias")
-    public ResponseEntity<List<CategoriaResponse>> listarCategorias() {
-        List<Categoria> listaDeCategorias = categoriaService.listarTodas();
-        List<CategoriaResponse> listaCategoriasResponse = new ArrayList<CategoriaResponse>();
-        for (Categoria c : listaDeCategorias) {
-            CategoriaResponse catResponse = new CategoriaResponse();
-            catResponse.nombre = c.getNombre();
-            catResponse.descripcion = c.getDescripcion();
-            listaCategoriasResponse.add(catResponse);
-        }
-        return ResponseEntity.ok(listaCategoriasResponse);
-    }
-
     @GetMapping("/api/categorias/{id}")
     @PreAuthorize("hasAuthority('CLAIM_userType_STAFF')")
     ResponseEntity<CategoriaResponse> buscarPorIdCategoria(@PathVariable Integer id) {

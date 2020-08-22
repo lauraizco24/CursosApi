@@ -44,7 +44,7 @@ public class DocentesController {
     }
 
     @GetMapping("/api/docentes/{id}")
-    @PreAuthorize("hasAuthority('CLAIM_userType_STAFF') or (hasAuthority('CLAIM_userType_DOCENTE') and hasAuthority('CLAIM_entityId_+#id'))")
+    @PreAuthorize("hasAuthority('CLAIM_userType_STAFF') or (hasAuthority('CLAIM_userType_DOCENTE') and hasAuthority('CLAIM_entityId_'+#id''))")
     ResponseEntity<Docente> buscarPorIdDocente(@PathVariable Integer id) {
         Docente docente = docenteService.buscarPorId(id);
         if (docente == null)
