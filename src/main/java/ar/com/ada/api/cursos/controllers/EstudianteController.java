@@ -50,6 +50,7 @@ public class EstudianteController {
           }
     }
 //Metodo de autorizacion 4: en este caso, accedo a la variable del parametro.
+
     @GetMapping("/api/estudiantes/{id}")
     @PreAuthorize("hasAuthority('CLAIM_userType_STAFF') or (hasAuthority('CLAIM_userType_ESTUDIANTE') and hasAuthority('CLAIM_entityId_'+#id''))")
     ResponseEntity<Estudiante> buscarPorIdEstudiante(@PathVariable Integer id) {

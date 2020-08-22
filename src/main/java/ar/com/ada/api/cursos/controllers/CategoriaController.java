@@ -27,6 +27,7 @@ public class CategoriaController {
     @Autowired
     UsuarioService usuarioService;
 
+    
     // Autorizacion Forma 1.
     // Se agrega el parametro Principal, que es una abstraccion que permite acceder
     // al usuario que esta logueado.

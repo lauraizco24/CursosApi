@@ -23,6 +23,7 @@ public class DocentesController {
 
     @Autowired
     DocenteService docenteService;
+    @Autowired
     CursoService cursoService;
 
     @PostMapping("/api/docentes")

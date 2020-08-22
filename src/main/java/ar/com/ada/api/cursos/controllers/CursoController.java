@@ -36,10 +36,11 @@ public class CursoController {
 
   @Autowired
   UsuarioService usuarioService;
+  
 
   @PostMapping("/api/cursos")
   @PreAuthorize("hasAuthority('CLAIM_userType_STAFF')")
-  public ResponseEntity<GenericResponse> crearCurso(@RequestBody CursoRequest cursoReq) {
+    public ResponseEntity<GenericResponse> crearCurso(@RequestBody CursoRequest cursoReq) {
     GenericResponse gR = new GenericResponse();
     Curso cursoCreado = new Curso();
     cursoCreado = cursoService.crearCurso(cursoReq.nombre, cursoReq.categoriaId, cursoReq.duracionHoras,
