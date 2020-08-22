@@ -51,7 +51,7 @@ public class UsuarioService {
         return u;
     }
 
-    public Usuario crearUsuario(TipoUsuarioEnum tipoUsuario, String nombre, int pais, TipoDocuEnum tipoDocumento,
+    public Usuario crearUsuario(TipoUsuarioEnum tipoUsuario, String nombre, Integer pais, TipoDocuEnum tipoDocumento,
             String documento, Date fechaNacimiento, String email, String password) {
 
         // Crear un nuevo usuario
