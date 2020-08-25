@@ -37,6 +37,7 @@ public class EstudianteController {
 
         GenericResponse r = new GenericResponse();
         Estudiante estudianteCreado = new Estudiante();
+        
         estudianteCreado = estudianteService.crearEstudiante(estudiante.getNombre(), estudiante.getPaisId(), estudiante.getTipoDocumentoId(), estudiante.getDocumento(), estudiante.getFechaNacimiento());
         if (estudianteCreado == null) {
             return ResponseEntity.badRequest().build();
