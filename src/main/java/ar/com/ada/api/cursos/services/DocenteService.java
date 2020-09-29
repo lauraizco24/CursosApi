@@ -24,14 +24,14 @@ public class DocenteService {
     DocenteRepository docenteRepo;
 
     public boolean crearDocente(Docente docente) {
-        if (docenteRepo.existsDocente(docente.getPaisId().getValue(), docente.getTipoDocumentoId().getValue(),
+        if (docenteRepo.existsDocente(docente.getPaisId(), docente.getTipoDocumentoId().getValue(),
                 docente.getDocumento()))
             return false;
         docenteRepo.save(docente);
         return true;
     }
 
-    public Docente crearDocente(String nombre, PaisEnum paisId, TipoDocuEnum tipoDocumentoId, String documento,
+    public Docente crearDocente(String nombre, Integer paisId, TipoDocuEnum tipoDocumentoId, String documento,
             Date fechaNacimiento) {
         Docente docente = new Docente();
         docente.setNombre(nombre);

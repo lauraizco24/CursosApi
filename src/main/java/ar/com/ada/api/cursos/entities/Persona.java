@@ -31,16 +31,7 @@ public class Persona {
         this.nombre = nombre;
     }
 
-    public PaisEnum getPaisId() {
-        return PaisEnum.parse(this.paisId);
-    }
-
-    public void setPaisId(PaisEnum paisId) {
-        this.paisId = paisId.getValue();
-    }
-    public void setPaisId(Integer paisId) {
-        this.paisId = paisId;
-    }
+   
     public TipoDocuEnum getTipoDocumentoId() {
         return TipoDocuEnum.parse(this.tipoDocumentoId);
     }
@@ -63,6 +54,18 @@ public class Persona {
 
     public void setFechaNacimiento(Date fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
+    }
+
+    public Integer getPaisId() {
+        return paisId;
+    }
+
+    public void setPaisId(Integer paisId) {
+        this.paisId = paisId;
+    }
+
+    public void setTipoDocumentoId(Integer tipoDocumentoId) {
+        this.tipoDocumentoId = tipoDocumentoId;
     }
 
     

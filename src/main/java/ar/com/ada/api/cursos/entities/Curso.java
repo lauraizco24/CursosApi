@@ -34,6 +34,9 @@ public class Curso {
     @Column(name="duracion_horas")
     private Integer duracionHoras;
 
+    private Double importe;
+    
+
     // Getters y Setters
 
     public Integer getCursoId() {
@@ -134,5 +137,13 @@ public class Curso {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public Double getImporte() {
+        return importe;
+    }
+
+    public void setImporte(Double importe) {
+        this.importe = importe;
     }
 }

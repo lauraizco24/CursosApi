@@ -20,6 +20,14 @@ public class Inscripcion {
     private Usuario usuario;
     @Column(name="estado_inscripcion_id")
     private int estadoInscripcionId;
+
+    private Double importe;
+
+    private String numero;
+    @Column(name="codigo_barras")
+    private String codigoDeBarra;
+
+
     
 //------------------Empieza enum----------------------------
   
@@ -99,7 +107,35 @@ public class Inscripcion {
 
 	public void setEstadoInscripcionId(EstadoInscripcionEnum estadoInscripcionId) {
 		this.estadoInscripcionId = estadoInscripcionId.getValue();
-	}   
+	}
+
+    public void setEstadoInscripcionId(int estadoInscripcionId) {
+        this.estadoInscripcionId = estadoInscripcionId;
+    }
+
+    public Double getImporte() {
+        return importe;
+    }
+
+    public void setImporte(Double importe) {
+        this.importe = importe;
+    }
+
+    public String getNumero() {
+        return numero;
+    }
+
+    public void setNumero(String numero) {
+        this.numero = numero;
+    }
+
+    public String getCodigoDeBarra() {
+        return codigoDeBarra;
+    }
+
+    public void setCodigoDeBarra(String codigoDeBarra) {
+        this.codigoDeBarra = codigoDeBarra;
+    }
 
 
 

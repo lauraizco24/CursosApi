@@ -3,6 +3,7 @@ package ar.com.ada.api.cursos.services;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,9 @@ import ar.com.ada.api.cursos.entities.Inscripcion.EstadoInscripcionEnum;
 import ar.com.ada.api.cursos.entities.Pais.PaisEnum;
 import ar.com.ada.api.cursos.entities.Pais.TipoDocuEnum;
 import ar.com.ada.api.cursos.repos.EstudianteRepository;
+import ar.com.ada.api.cursos.sistema.com.pagada.PagADAService;
+import ar.com.ada.api.cursos.sistema.com.pagada.models.Deuda;
+import ar.com.ada.api.cursos.sistema.com.pagada.models.Deudor;
 
 @Service
 public class EstudianteService {
@@ -20,19 +24,21 @@ public class EstudianteService {
     EstudianteRepository estudianteRepo;
     @Autowired
     CursoService cursoService;
-    
+    @Autowired
+    PagADAService pagAdaService;
+
     public boolean crearEstudiante(Estudiante estudiante) {
-        if (estudianteRepo.existsEstudiante(estudiante.getPaisId().getValue(), estudiante.getTipoDocumentoId().getValue(),
-        estudiante.getDocumento())){
+        if (estudianteRepo.existsEstudiante(estudiante.getPaisId(), estudiante.getTipoDocumentoId().getValue(),
+                estudiante.getDocumento())) {
             return false;
-                    }           
-                     estudianteRepo.save(estudiante);
+        }
+        estudianteRepo.save(estudiante);
         return true;
     }
 
-    public Estudiante crearEstudiante(String nombre, PaisEnum paisEnum, TipoDocuEnum tipoDocuEnum, String documento,
+    public Estudiante crearEstudiante(String nombre, Integer paisEnum, TipoDocuEnum tipoDocuEnum, String documento,
             Date fechaNacimiento) {
-                Estudiante estudiante = new Estudiante();
+        Estudiante estudiante = new Estudiante();
         estudiante.setNombre(nombre);
         estudiante.setPaisId(paisEnum);
         estudiante.setTipoDocumentoId(tipoDocuEnum);
@@ -60,19 +66,48 @@ public class EstudianteService {
         return estudianteRepo.findAll();
     }
 
+    public List<Deudor> obtenerDeudores() {
+        return obtenerEstudiantes().stream().map(e -> e.getDeudor()).flatMap(ds -> ds.stream())
+                .collect(Collectors.toList());
+
+    }
+
+    public Estudiante buscarPorDeudorId(Integer deudorId) {
+
+        return obtenerDeudores().stream().filter(d -> d.id.equals(deudorId)).findAny().get().getEstudiante();
+
+    }
+
     public Inscripcion inscribir(Integer estudianteId, Integer cursoId) {
-        // TODO:buscar el estudiante por Id
+        // buscar el estudiante por Id
         // buscar el curso por Id;
         // Crear la inscripcion(aprobada por defecto)
         // Asignar la inscripcion al Usuario del Estudiante
         // Agregar el Estudiante a la Lista de Estudiantes que tiene Curso
 
         Estudiante estudiante = buscarPorId(estudianteId);
+
+        // Alta del Deudor
+        Deudor deudor = new Deudor();
+        deudor.id = pagAdaService.crearDeudor(estudiante);
+
         Curso curso = cursoService.buscarPorId(cursoId);
+
+        Deuda deuda = pagAdaService.altaDeDeuda(deudor.id, curso);
+        // Se crea la inscripcion
         Inscripcion inscripcion = new Inscripcion();
 
         inscripcion.setFechaInscripcion(new Date());
-        inscripcion.setEstadoInscripcionId(EstadoInscripcionEnum.ACTIVO);
+
+        // Alta de la Deuda
+        inscripcion.setEstadoInscripcionId(EstadoInscripcionEnum.INACTIVO);
+        inscripcion.setImporte(curso.getImporte());
+        deuda.fechaEmision = inscripcion.getFechaInscripcion();
+        deuda.fechaVencimiento = inscripcion.getFechaInscripcion();
+
+        //TODO: ejecutar API para crear el Servicio
+        //si todo esta bien cambiar a estado activo
+
 
         // inscripcion.setCurso(curso);
         inscripcion.setUsuario(estudiante.getUsuario());
@@ -82,5 +117,5 @@ public class EstudianteService {
 
         estudianteRepo.save(estudiante);
         return inscripcion;
-    } 
+    }
 }

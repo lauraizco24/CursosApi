@@ -21,6 +21,9 @@ public class Categoria {
     inverseJoinColumns = @JoinColumn(name = "curso_id"))
     @JsonIgnore
     private List<Curso> cursos;
+    @OneToOne
+    @JoinColumn(name = "categoria_id", referencedColumnName = "categoria_id")
+    private Imagen imagen;
 
     public Integer getCategoriaId() {
         return categoriaId;
@@ -52,6 +55,14 @@ public class Categoria {
 
     public void setCursos(List<Curso> cursos) {
         this.cursos = cursos;
+    }
+
+    public Imagen getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(Imagen imagen) {
+        this.imagen = imagen;
     }
 
     
