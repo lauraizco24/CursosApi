@@ -56,16 +56,41 @@ public class PagADAService {
 
     }
 
+    public ResultadoCreacionDeuda crearDeuda(Deuda deuda) {
+        ResultadoCreacionDeuda resultado = new ResultadoCreacionDeuda();
+
+        JsonNode r;
+        HttpResponse<JsonNode> request = Unirest.post("https://pagada.herokuapp.com/api/servicios")
+                .header("content-type", "application/json").body(deuda) // AcaPasamos el RequestBody
+                .header("api", "831DYEY1811NOMECORTENELSERVICIO").asJson();
+
+        r = request.getBody();
+
+        JSONObject jsonObject = r.getObject();
+
+        resultado.isOk = jsonObject.getBoolean("isOk");
+        resultado.id = jsonObject.getInt("id");
+        resultado.message = jsonObject.getString("message");
+
+        return resultado;
+
+    }
+
     public Deuda altaDeDeuda(Integer deudorId, Curso curso) {
 
         Deuda deuda = new Deuda();
-        // deuda.numero = random
+        deuda.numero = "939393981";
         deuda.importe = curso.getImporte();
         deuda.fechaEmision = new Date();
         deuda.fechaVencimiento = new Date();
-        // deuda.codigoBarras =
+        deuda.empresaId = 2;
+        deuda.moneda = "ARS";
+        deuda.deudorId = deudorId;
+        deuda.tipoComprobanteId = "FACTURA";
+        deuda.estadoId = "PENDIENTE";
+        deuda.tipoServicioId = 12;
+        deuda.codigoDeBarras = "12345681";
         return deuda;
-
 
     }
 }

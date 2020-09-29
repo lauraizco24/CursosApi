@@ -27,7 +27,7 @@ public class Estudiante extends Persona {
     @JsonIgnore
     @ManyToMany
     @JoinTable(name = "deudor_x_estudiante", joinColumns = @JoinColumn(name = "estudiante_id"), inverseJoinColumns = @JoinColumn(name = "deudor_id"))
-    private List<Deudor> deudor;
+    private List<Deudor> deudores;
 
     // Getters y Setters
 
@@ -57,14 +57,17 @@ public class Estudiante extends Persona {
     }
 
     public List<Deudor> getDeudor() {
-        return deudor;
+        return deudores;
     }
 
-    public void setDeudor(List<Deudor> deudor) {
-        this.deudor = deudor;
+    public void setDeudor(List<Deudor> deudores) {
+        this.deudores = deudores;
         usuario.setEstudiante(this);
     }
 
-  
+    public void asignarDeudor(Deudor deudor) {
+        this.deudores.add(deudor);
+        deudor.getEstudiantes().add(this);
+    } 
 
 }

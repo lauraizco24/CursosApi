@@ -17,6 +17,7 @@ import ar.com.ada.api.cursos.repos.EstudianteRepository;
 import ar.com.ada.api.cursos.sistema.com.pagada.PagADAService;
 import ar.com.ada.api.cursos.sistema.com.pagada.models.Deuda;
 import ar.com.ada.api.cursos.sistema.com.pagada.models.Deudor;
+import ar.com.ada.api.cursos.sistema.com.pagada.models.ResultadoCreacionDeuda;
 
 @Service
 public class EstudianteService {
@@ -74,7 +75,10 @@ public class EstudianteService {
 
     public Estudiante buscarPorDeudorId(Integer deudorId) {
 
-        return obtenerDeudores().stream().filter(d -> d.id.equals(deudorId)).findAny().get().getEstudiante();
+        // return obtenerDeudores().stream().filter(d ->
+        // d.id.equals(deudorId)).findAny().get().getEstudiantes();
+        return obtenerDeudores().stream().filter(d -> d.id.equals(deudorId)).findAny().get().getEstudiantes().stream()
+                .findAny().get();
 
     }
 
@@ -105,15 +109,22 @@ public class EstudianteService {
         deuda.fechaEmision = inscripcion.getFechaInscripcion();
         deuda.fechaVencimiento = inscripcion.getFechaInscripcion();
 
-        //TODO: ejecutar API para crear el Servicio
-        //si todo esta bien cambiar a estado activo
+        ResultadoCreacionDeuda rd = pagAdaService.crearDeuda(deuda);
 
+        // ejecutar API para crear el Servicio
+        if (rd.isOk) {
+            // si todo esta bien cambiar a estado activo
+            inscripcion.setEstadoInscripcionId(EstadoInscripcionEnum.ACTIVO);
+        } else {
+            inscripcion.setEstadoInscripcionId(EstadoInscripcionEnum.INACTIVO);
+        }
 
         // inscripcion.setCurso(curso);
         inscripcion.setUsuario(estudiante.getUsuario());
 
         curso.agregarInscripcion(inscripcion);
         curso.asignarEstudiante(estudiante);
+        estudiante.asignarDeudor(deudor);
 
         estudianteRepo.save(estudiante);
         return inscripcion;
